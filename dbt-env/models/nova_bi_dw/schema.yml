@@ -1,0 +1,9 @@
+version: 2  # La versión del esquema
+
+sources:  # Definición de fuentes
+  - name: STAGING  # Nombre que utilizarás para referenciar esta fuente
+    database: STAGING  # Base de datos donde está la fuente
+    schema: PUBLIC  # Esquema donde está la fuente
+    tables:  # Lista de tablas dentro de esta fuente
+      - name: experiencias  # Nombre de la tabla en Snowflake
+        description: "Tabla que contiene experiencias."  # Descripción opcional

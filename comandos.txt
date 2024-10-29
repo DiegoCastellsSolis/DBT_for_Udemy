@@ -1,0 +1,20 @@
+pip install virtualenv
+virtualenv dbt-env
+.\dbt-env\Scripts\activate  # Para activar el entorno en Windows
+
+
+
+
+pip install dbt-snowflake
+
+dbt --version
+
+cd mi_proyecto
+
+dbt run --models nova_bi_dw
+
+dbt docs generate
+
+dbt docs serve
+
+
