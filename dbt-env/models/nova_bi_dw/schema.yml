@@ -7,3 +7,12 @@ sources:  # Definición de fuentes
     tables:  # Lista de tablas dentro de esta fuente
       - name: experiencias  # Nombre de la tabla en Snowflake
         description: "Tabla que contiene experiencias."  # Descripción opcional
+  - name: DW  # Nombre que utilizarás para referenciar esta fuente
+    database: DW  # Base de datos donde está la fuente
+    schema: PUBLIC  # Esquema donde está la fuente
+    tables:  # Lista de tablas dentro de esta fuente
+      - name: DIM_CATEGORIA        # Nombre de la tabla en Snowflake
+      - name: DIM_UBICACION       # Nombre de la tabla en Snowflake
+      - name: DIM_PAIS            # Nombre de la tabla en Snowflake
+      - name: DIM_DURACION        # Nombre de la tabla en Snowflake
+      - name: DIM_DISPONIBILIDAD  # Nombre de la tabla en Snowflake  
