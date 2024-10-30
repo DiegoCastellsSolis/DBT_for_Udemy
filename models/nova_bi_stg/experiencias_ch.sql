@@ -1,13 +1,12 @@
--- models/experiencias_pe.sql
+-- models/experiencias_ch.sql
 {{ config(
     materialized='table',
-    database='staging',
-    schema='report'  
+    database='staging' 
 ) }}
 with source_data as (
     select * 
     from {{ source('STAGING', 'experiencias') }}  -- Referencia a la fuente
-    WHERE pais = 'Perú'
+    WHERE pais = 'Chile'
 )
 
 select * 

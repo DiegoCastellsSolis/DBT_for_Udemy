@@ -5,7 +5,7 @@
 ) }}
 with source_data as (
     select * 
-    from {{ source('STAGING', 'experiencias') }}  -- Referencia a la fuente
+    from {{ source('STAGING_NOVA_BI_STG', 'experiencias') }}  -- Referencia a la fuente
     WHERE pais = 'Chile'
 )
 

@@ -36,3 +36,12 @@ models:
       +materialized: view
     nova_bi_dw:  # nombre de la carpeta del modelo
       +materialized: table  # o table, dependiendo de cómo quieras materializar el modelo 
+    nova_bi_stg:
+      +materialized: table  # o table, dependiendo de cómo quieras materializar el modelo 
+
+# Agrega configuración de seeds si es necesario
+seeds:
+  my_dbt_project:  # usa el nombre de tu proyecto aquí
+    +database: staging  # Base de datos donde se insertarán los seeds
+    +schema: public     # Esquema donde se crearán las tablas seed
+    +quote_columns: false  # Opcional, para evitar comillas en nombres de columnas
