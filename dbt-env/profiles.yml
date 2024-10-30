@@ -1,0 +1,23 @@
+DBT_for_Udemy:
+    outputs: 
+      STAGING:  # Cambia esto por el nombre que desees para tu entorno
+        type: snowflake
+        account: ww00509.eu-west-3.aws  # Sin ".snowflakecomputing.com"
+        user: NOVABI  # Tu nombre de usuario de Snowflake
+        password: Nova-bi2024  # Tu contraseña de Snowflake
+        warehouse: COMPUTE_WH  # Reemplaza con tu warehouse de Snowflake
+        role: ACCOUNTADMIN
+        database: STAGING  # Reemplaza con el nombre de tu base de datos
+        schema: PUBLIC  # Reemplaza con el esquema que deseas usar
+        authenticator: snowflake  # Este es el valor predeterminado
+      DW:  # Cambia esto por el nombre que desees para tu entorno
+        type: snowflake
+        account: ww00509.eu-west-3.aws  # Sin ".snowflakecomputing.com"
+        user: NOVABI  # Tu nombre de usuario de Snowflake
+        password: Nova-bi2024  # Tu contraseña de Snowflake
+        warehouse: COMPUTE_WH  # Reemplaza con tu warehouse de Snowflake
+        role: ACCOUNTADMIN
+        database: DW  # Reemplaza con el nombre de tu base de datos
+        schema: PUBLIC  # Reemplaza con el esquema que deseas usar
+        authenticator: snowflake  # Este es el valor predeterminado           
+    target: DW  # Define cuál de las salidas usar como objetivo por defecto
