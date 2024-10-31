@@ -26,6 +26,7 @@ Activa el entorno de trabajo para el proyecto
     ```bash
         .\dbt-env\Scripts\activate
     ```
+
 3. **Ingresa al proyecto**
 Ingresamos a el entorno de trabajo para el proyecto
     ```bash
@@ -37,9 +38,33 @@ Ubicamos la carpeta .dbt donde se encuentra
     ```bash
        C:\Users\{{usuario}}\.dbt
     ```
-remplazar {{usuario}} por tu usuario.
-dentro de dicha carpeta encontraremos el archivo profiles.yml que deberia de tener la siguiente apariencia:
-      
+    remplazar {{usuario}} por tu usuario.
+    dentro de dicha carpeta encontraremos el archivo profiles.yml que deberia de tener la siguiente apariencia:
+    ``` yaml
+    DBT_for_Udemy:
+        outputs: 
+        STAGING:  # Cambia esto por el nombre que desees para tu entorno
+            type: snowflake
+            account: ww00509.eu-west-3.aws  # Sin ".snowflakecomputing.com"
+            user: NOVABI  # Tu nombre de usuario de Snowflake
+            password: Nova-bi2024  # Tu contraseña de Snowflake
+            warehouse: COMPUTE_WH  # Reemplaza con tu warehouse de Snowflake
+            role: ACCOUNTADMIN
+            database: STAGING  # Reemplaza con el nombre de tu base de datos
+            schema: PUBLIC  # Reemplaza con el esquema que deseas usar
+            authenticator: snowflake  # Este es el valor predeterminado
+        DW:  # Cambia esto por el nombre que desees para tu entorno
+            type: snowflake
+            account: ww00509.eu-west-3.aws  # Sin ".snowflakecomputing.com"
+            user: NOVABI  # Tu nombre de usuario de Snowflake
+            password: Nova-bi2024  # Tu contraseña de Snowflake
+            warehouse: COMPUTE_WH  # Reemplaza con tu warehouse de Snowflake
+            role: ACCOUNTADMIN
+            database: DW  # Reemplaza con el nombre de tu base de datos
+            schema: PUBLIC  # Reemplaza con el esquema que deseas usar
+            authenticator: snowflake  # Este es el valor predeterminado           
+        target: DW  # Define cuál de las salidas usar como objetivo por defecto
+    ```
 5. **Creamos modelos**
 Eje 
 
@@ -53,13 +78,13 @@ Ahora compilamos los modelos y las semillas
         dbt seed 
     ```
 
-7.**Acceso a la Interfaz de Usuario de Airflow**
-Puedes acceder a la interfaz de usuario de Airflow abriendo un navegador y navegando a:
+7. **Acceso a la Interfaz de la documentación de DBT**
+Puedes acceder a la interfaz de usuario de dbt abriendo un navegador se debe ejecutar los sig comandos:
     ```bash
         dbt docs generate
         dbt docs serve 
     ```
-O en su defecto.
-    ```bash
-        http://localhost:8081
-    ```
+    O en su defecto.
+        ```bash
+            http://localhost:8081
+        ```
