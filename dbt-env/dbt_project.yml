@@ -30,7 +30,8 @@ clean-targets:         # directories to be removed by `dbt clean`
 # directory as views. These settings can be overridden in the individual model
 # files using the `{{ config(...) }}` macro.
 models:
-  mi_proyecto:
+  #mi_proyecto:
+  DBT_for_Udemy:  
     # Config indicated by + and applies to all files under models/example/
     example:
       +materialized: view
@@ -41,7 +42,8 @@ models:
 
 # Agrega configuración de seeds si es necesario
 seeds:
-  my_dbt_project:  # usa el nombre de tu proyecto aquí
+  #mi_proyecto:
+  DBT_for_Udemy:
     +database: staging  # Base de datos donde se insertarán los seeds
-    +schema: public     # Esquema donde se crearán las tablas seed
+    #+schema: public     # Esquema donde se crearán las tablas seed
     +quote_columns: false  # Opcional, para evitar comillas en nombres de columnas
