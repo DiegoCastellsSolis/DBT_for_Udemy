@@ -7,3 +7,5 @@ sources:  # Definición de fuentes
     tables:  # Lista de tablas dentro de esta fuente
       - name: experiencias  # Nombre de la tabla en Snowflake
         description: "Tabla que contiene experiencias."  # Descripción opcional
+      - name: VENTAS_MENSUALES  # Nombre de la tabla en Snowflake
+        description: "Tabla que contiene ventas_mensuales."  # Descripción opcional
