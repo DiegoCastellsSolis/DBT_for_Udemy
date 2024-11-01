@@ -16,13 +16,13 @@ Instalamos python en caso de tenerlo instalado
 
 ## Pasos para Desplegar DBT
 
-1. **Crear un entorno virtual**  
+1. **Crear un entorno virtual.**  
 Crea el entorno de trabajo para el proyecto
     ```bash
         python -m venv dbt-env
     ```
 
-2. **Activa el entorno**
+2. **Activa el entorno.**
 Activa el entorno de trabajo para el proyecto
     ```bash
         .\dbt-env\Scripts\activate
@@ -39,8 +39,34 @@ Ubicamos la carpeta .dbt donde se encuentra
     ```bash
        C:\Users\{{usuario}}\.dbt
     ```
-    remplazar {{usuario}} por tu usuario.
+    Remplazar {{usuario}} por tu usuario.
     dentro de dicha carpeta encontraremos el archivo profiles.yml que deberia de tener la siguiente apariencia:
+    ``` yaml
+    {{profile}}:
+        outputs: 
+        {{name_selected_for_enviroment_dbt_input}}:  # Cambia esto por el nombre que desees para tu entorno
+            type: {{name_warehouse}}
+            account: {{}}  # Sin ".snowflakecomputing.com"
+            user: {{name_user_wh}}  # Tu nombre de usuario de Snowflake
+            password: {{password_wh}}  # Tu contraseña de Snowflake
+            warehouse: {{wh_name}}  # Reemplaza con tu warehouse de Snowflake
+            role: {{wh_role}}
+            database: {{name_database}}  # Reemplaza con el nombre de tu base de datos
+            schema: {{name_schema}}  # Reemplaza con el esquema que deseas usar
+            authenticator: {{type_authentication}}  # Este es el valor predeterminado
+        {{name_selected_for_enviroment_dbt_target}}:  # Cambia esto por el nombre que desees para tu entorno
+            type: {{name_warehouse}}
+            account: {{}}  # Sin ".snowflakecomputing.com"
+            user: {{name_user_wh}}  # Tu nombre de usuario de Snowflake
+            password: {{password_wh}}  # Tu contraseña de Snowflake
+            warehouse: {{wh_name}}  # Reemplaza con tu warehouse de Snowflake
+            role: {{wh_role}}
+            database: {{name_database}}  # Reemplaza con el nombre de tu base de datos
+            schema: {{name_schema}}  # Reemplaza con el esquema que deseas usar
+            authenticator: {{type_authentication}}  # Este es el valor predeterminado          
+        target: {{name_selected_for_enviroment_dbt_target}}  # Define cuál de las salidas usar como objetivo por defecto
+    ```
+    En mi caso tiene la siguiente apariencia:
     ``` yaml
     DBT_for_Udemy:
         outputs: 
@@ -71,9 +97,13 @@ Ubicamos la carpeta .dbt donde se encuentra
 
     Crea un archivo SQL dentro de la carpeta models, por ejemplo my_first_model.sql, con una consulta básica:
     ``` sql
-    -- my_first_model.sql
+    -- model_1.sql
     SELECT *
-    FROM {{ source('your_schema', 'your_table') }}    
+    FROM {{ source('schema', 'table') }}    
+    ```
+    ejecuta el siguiente comando para cargar el modelo:
+    ``` bash
+    dbt run
     ```
 
 6. **Crear Seeds**
@@ -89,7 +119,7 @@ Ubicamos la carpeta .dbt donde se encuentra
             +schema: {{name_schema_target}}  #Puedes añadir el esquema deseado si es necesario
             +quote_columns: false  #Opcional, para evitar comillas en nombres de columnas
     ```
-    En mi caso
+    En mi caso:
      ``` yaml
     seeds: 
         DBT_for_Udemy:  #Asegúrate de que el nombre coincida exactamente con el de profiles.yml
@@ -99,18 +129,19 @@ Ubicamos la carpeta .dbt donde se encuentra
     ```
 
 7. **Compilamos**
-Ahora compilamos los modelos y las semillas
+    Ahora compilamos los modelos y las semillas
     ```bash
         dbt run
         dbt seed 
     ```
 
-7. **Acceso a la Interfaz de la documentación de DBT**
-Puedes acceder a la interfaz de usuario de dbt abriendo un navegador se debe ejecutar los sig comandos:
+8. **Acceso a la Interfaz de la documentación de DBT**
+    Puedes acceder a la interfaz de usuario de dbt abriendo un navegador se debe ejecutar los sig comandos:
     ```bash
         dbt docs generate
         dbt docs serve 
     ```
+    Esto de permite acceder al catalogo generado en base a nuestro proyecto.
     Automaticamente esto te redirigira a 
     ```bash
         http://localhost:8080/#!/overview
