@@ -1,0 +1,101 @@
+1. Models
+Qué son: Los models en DBT son archivos SQL que definen transformaciones de datos. Cada archivo dentro de la carpeta /models en un proyecto DBT es tratado como un modelo.
+Usos comunes:
+Transformación de datos en SQL: Son el núcleo del proceso de transformación y se encargan de transformar los datos de origen en Snowflake a estructuras de datos listas para análisis.
+Organización en capas: Los modelos se dividen comúnmente en capas (staging, intermediate, marts) para estructurar mejor las transformaciones.
+Configuración de modelos:
+Materializations: Configura cómo se almacenan los modelos (view, table, incremental, ephemeral).
+Referencias: Se usa {{ ref('model_name') }} para conectar modelos, lo cual facilita la gestión de dependencias.
+Ejemplo:
+sql
+Copiar código
+-- Archivo: models/staging/stg_orders.sql
+select
+    order_id,
+    customer_id,
+    order_date
+from {{ source('raw_data', 'orders') }}
+2. Seeds
+Qué son: Los seeds son archivos CSV cargados al warehouse como tablas. Se encuentran en la carpeta /seeds del proyecto.
+Usos comunes:
+Datos de referencia: Seeds son útiles para cargar datos estáticos, como códigos de país, listas de productos, configuraciones o datos de prueba.
+Pruebas y simulaciones: Se pueden usar para cargar datos simulados y hacer pruebas de modelos.
+Comandos y Configuración:
+Comando: dbt seed --full-refresh para cargar o recargar todas las tablas de seed.
+Variables de seed: Puedes ajustar opciones en el archivo dbt_project.yml para definir cómo se crean estas tablas.
+Ejemplo:
+csv
+Copiar código
+-- Archivo: seeds/countries.csv
+country_code,country_name
+US,United States
+MX,Mexico
+CA,Canada
+3. Macros
+Qué son: Las macros en DBT son fragmentos de código reutilizables escritos en Jinja y SQL. Las macros permiten automatizar partes del código SQL y crear funciones personalizadas que faciliten la reutilización.
+Usos comunes:
+Plantillas de SQL: Crear snippets reutilizables, como filtros por fecha o cálculos estándar.
+Automatización avanzada: Definir lógica condicional, realizar operaciones iterativas o llamar a consultas dentro de DBT.
+Condicionales y parametrización: Permiten personalizar queries según variables o parámetros específicos.
+Ejemplo de macro:
+python
+Copiar código
+-- Archivo: macros/helpers.sql
+{% macro last_n_days(n) %}
+    current_date - interval '{{ n }} days'
+{% endmacro %}
+
+-- Uso en un modelo:
+select *
+from {{ ref('orders') }}
+where order_date >= {{ last_n_days(30) }}
+4. Snapshots
+Qué son: Los snapshots en DBT registran el estado de una tabla en un momento determinado, permitiendo llevar un historial de cambios en los datos.
+Usos comunes:
+Seguimiento de cambios históricos: Como cuando hay cambios en la información de clientes, estatus de pedidos, o cualquier dato que pueda cambiar con el tiempo.
+Auditoría de datos: Para cumplir con requerimientos de auditoría o análisis de cambios.
+Configuración de snapshots:
+Definir una estrategia de actualización (check o timestamp) para determinar si un registro ha cambiado.
+Ejemplo:
+yaml
+Copiar código
+-- Archivo: snapshots/snapshots.yml
+snapshots:
+  my_snapshot:
+    target_schema: "snapshots"
+    target_database: "analytics"
+    strategy: timestamp
+    updated_at: "updated_at_column"
+5. Tests
+Qué son: Las pruebas (tests) en DBT son funciones integradas o personalizadas que verifican la calidad y consistencia de los datos.
+Usos comunes:
+Pruebas de unicidad, no nulo, relaciones: Verificar que las claves principales sean únicas, los campos obligatorios estén completos y las relaciones entre tablas sean válidas.
+Pruebas personalizadas: Definir reglas o expectativas específicas para asegurar la integridad de los datos.
+Ejemplo:
+yaml
+Copiar código
+-- Archivo: models/orders.yml
+tests:
+  - unique: id
+  - not_null: status
+  - relationships:
+      to: ref('customers')
+      field: id
+6. Sources
+Qué son: Los sources permiten definir y documentar fuentes de datos externas, como tablas sin procesar en Snowflake, para utilizarlas en los modelos DBT.
+Usos comunes:
+Conexión a datos de origen: Acceder y referenciar tablas crudas (sin procesar) en Snowflake para luego transformarlas.
+Documentación y calidad: Definir pruebas de calidad en los datos de origen y tener trazabilidad en el linaje de datos.
+Ejemplo:
+yaml
+Copiar código
+-- Archivo: models/sources.yml
+version: 2
+sources:
+  - name: raw_data
+    tables:
+      - name: orders
+        description: "Tabla de pedidos sin procesar"
+        tests:
+          - not_null: order_id
+Estos elementos son las herramientas básicas y avanzadas de DBT que permiten construir un proceso de transformación de datos modular, escalable y documentado. Para cada uno, es útil incluir ejemplos y ejercicios prácticos en el curso para que los alumnos vean cómo usarlos en conjunto en un flujo de trabajo real.

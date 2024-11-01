@@ -1,0 +1,114 @@
+1. Comandos Básicos de DBT
+dbt run: Ejecuta todos los modelos en el proyecto o solo los especificados.
+
+Ejemplo: dbt run --select +modelo_base (Ejecuta el modelo modelo_base y todos los modelos dependientes).
+dbt test: Corre las pruebas de calidad de datos definidas en el proyecto.
+
+Ejemplo: dbt test --select my_model (Corre pruebas sobre my_model).
+dbt compile: Compila todos los archivos SQL, útil para verificar errores sin ejecutar transformaciones.
+
+dbt build: Ejecuta el flujo completo (dbt run, dbt test, dbt seed), permitiendo una actualización de modelos con pruebas automáticas.
+
+dbt seed: Carga archivos CSV a tu warehouse como tablas para ser usadas en modelos o pruebas.
+
+Ejemplo: dbt seed --full-refresh (Recarga todos los archivos seed).
+dbt snapshot: Captura datos en su estado actual y permite hacer un seguimiento de cambios históricos.
+
+2. Materializaciones (Materializations)
+view: Materialización predeterminada en DBT que crea una vista en lugar de una tabla en Snowflake.
+
+Configuración: materialized='view' en el archivo .sql.
+table: Crea una tabla física en el warehouse; útil para modelos que no cambian frecuentemente y necesitan optimización.
+
+incremental: Solo actualiza nuevos datos en lugar de reescribir la tabla completa, optimizando el tiempo de carga.
+
+Configuración: materialized='incremental' y uso de is_incremental() para condicionales SQL.
+ephemeral: Realiza cálculos en la memoria y evita crear una tabla o vista, útil para modelos intermedios.
+
+3. Funciones de Jinja y Macros
+{{ ref('model_name') }}: Permite referenciar otro modelo en DBT, gestionando dependencias y orden de ejecución.
+
+{{ source('source_name', 'table_name') }}: Define una fuente de datos externa; útil para conectarse a tablas en Snowflake.
+
+is_incremental(): Condicional que se utiliza dentro de un modelo incremental para controlar las actualizaciones de registros.
+
+sql
+Copiar código
+where last_updated > (select max(last_updated) from {{ this }})
+log(): Función para imprimir mensajes en el log de ejecución, ideal para debugging.
+
+python
+Copiar código
+{{ log("Esto es un mensaje de log", info=True) }}
+run_query(): Ejecuta una query SQL dentro de una macro y permite recuperar resultados.
+
+python
+Copiar código
+{% set result = run_query("select count(*) from my_table") %}
+execute: Identifica si el modelo está ejecutándose o solo compilándose, útil para condicionales.
+
+sql
+Copiar código
+{% if execute %}
+    select * from {{ ref('my_model') }}
+{% else %}
+    select * from information_schema.tables
+{% endif %}
+4. Pruebas de Calidad de Datos (Data Tests)
+Pruebas de unicidad:
+
+yaml
+Copiar código
+- name: id
+  tests:
+    - unique
+Pruebas de no nulo (not null):
+
+yaml
+Copiar código
+- name: user_id
+  tests:
+    - not_null
+Pruebas de relaciones (verificación de claves externas):
+
+yaml
+Copiar código
+- name: customer_id
+  tests:
+    - relationships:
+        to: ref('customers')
+        field: id
+Pruebas de valores aceptables:
+
+yaml
+Copiar código
+- name: status
+  tests:
+    - accepted_values:
+        values: ['active', 'inactive']
+5. Hooks y Configuración Avanzada
+Hooks pre y post ejecución: Ejecuta comandos antes o después de un modelo, como refrescar tablas o ajustar permisos.
+
+yaml
+Copiar código
+models:
+  my_project:
+    pre-hook: "grant select on {{ this }} to role analyst"
+    post-hook: "grant select on {{ this }} to role analyst"
+Variables de Configuración (Variables): Se definen en dbt_project.yml y se acceden con {{ var('nombre_var') }}.
+
+yaml
+Copiar código
+vars:
+  my_project: 'nombre_del_proyecto'
+Ajustes de paralelismo: Permite definir el número de hilos en dbt_project.yml para correr modelos en paralelo en Snowflake.
+
+yaml
+Copiar código
+threads: 4
+6. Comandos de Documentación
+dbt docs generate: Genera documentación de modelos, fuentes y pruebas en formato HTML.
+
+dbt docs serve: Lanza un servidor web para visualizar la documentación generada.
+
+Estos comandos y funciones son clave para ejecutar, configurar y optimizar proyectos en DBT, especialmente en Snowflake. Incluir ejemplos de uso y casos de error típicos también puede ayudar a los estudiantes a comprender cómo aplicar cada uno.

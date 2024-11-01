@@ -1,0 +1,30 @@
+1. Introducción a DBT y su Filosofía
+Qué es DBT: Explica que es una herramienta de transformación de datos que se centra en SQL y sigue un enfoque de “transformación en el warehouse”. Esencial que los alumnos comprendan el rol de DBT en el ciclo ELT (Extract, Load, Transform).
+SQL-first y código versionado: Señala cómo DBT permite a los analistas y científicos de datos trabajar directamente en SQL, beneficiándose de la versionación en Git.
+Modularidad y reutilización del código: Cómo DBT facilita la creación de modelos en capas y la reutilización de transformaciones complejas.
+2. Conexión de DBT con Snowflake
+Configuración del perfil de conexión: Explica el archivo profiles.yml, las credenciales necesarias, y el uso de cuentas, usuarios, roles y warehouses en Snowflake.
+Optimizaciones específicas de Snowflake: Cómo configurar DBT para aprovechar el auto-scaling de Snowflake y maximizar el rendimiento. Puedes señalar diferencias de rendimiento al seleccionar diferentes warehouses y cómo DBT gestiona esto.
+3. Modelos y Estructura del Proyecto DBT
+Modelos: Explica qué son los modelos en DBT (archivos .sql en la carpeta /models) y cómo DBT los usa para definir transformaciones de datos en SQL.
+Estrategias de modelado: Discute el concepto de staging, cleansed y gold layers para crear transformaciones escalables y organizadas en Snowflake.
+Macros y Jinja: Introducción a macros y uso de Jinja para plantillas SQL reutilizables, enfatizando cómo DBT permite automatizar partes del código y estandarizar procesos.
+4. Pruebas y Validación de Datos
+Pruebas integradas y personalizadas: Enseña el uso de pruebas integradas en DBT (como unique, not_null, relationships, etc.) y cómo crear pruebas personalizadas.
+Data quality: Cómo DBT ayuda a garantizar la calidad de los datos en Snowflake usando pruebas periódicas, e integra pruebas en el proceso de CI/CD.
+5. Documentación y Lineage (Lineaje de Datos)
+Auto-documentación de modelos: Muestra cómo DBT documenta cada transformación, lo cual es crucial en entornos grandes.
+Lineage: Explica el flujo de los datos desde las tablas de origen hasta los modelos transformados, y cómo visualizarlo en el DBT DAG. Snowflake facilita este flujo, permitiendo a los usuarios ver claramente cómo y dónde se transforman los datos.
+6. Gestión y Monitoreo de Proyectos
+CI/CD con DBT: Introduce conceptos de integración continua con DBT y GitHub Actions u otras herramientas de CI. Esto es clave en proyectos de producción.
+Scheduler y monitoreo de jobs: Explica cómo agendar y monitorear jobs en DBT Cloud o con herramientas como Airflow para lanzar transformaciones en Snowflake automáticamente.
+7. Optimización de Costos en Snowflake con DBT
+Materialización: Explica los diferentes tipos de materializaciones en DBT (view, table, incremental y ephemeral) y cómo elegir la estrategia adecuada según los requerimientos de cada modelo.
+Uso eficiente de Snowflake: Consejos sobre cómo DBT puede ayudar a minimizar el costo en Snowflake mediante particionamiento de datos y uso de caché, en especial con tablas incremental.
+8. Avanzado: Funciones y Performance
+Testing y Debugging de queries en Snowflake: Cómo aprovechar el Query History en Snowflake para entender y optimizar queries generadas por DBT.
+Macros avanzadas y hooks pre/post: Explica cómo crear procesos personalizados y condicionales con macros avanzadas, y cómo usar hooks para ejecutar comandos antes o después de cada modelo.
+9. Casos de Uso y Buenas Prácticas
+Ejemplos prácticos: Basados en escenarios reales, como limpieza de datos, agregación de métricas o segmentación de clientes.
+Buenas prácticas de versionado y organización: Cómo estructurar carpetas, documentar código y mantener una nomenclatura consistente para proyectos escalables y sostenibles.
+Un curso así proporcionará tanto el conocimiento técnico como las prácticas recomendadas para gestionar y escalar proyectos de transformación de datos con DBT en un entorno Snowflake.
